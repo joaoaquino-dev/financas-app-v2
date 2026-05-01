@@ -8,6 +8,13 @@ const TransactionForm = ({ onAdd }: TransactionFormProps) => {
   const [name, setName] = useState("");
   const [value, setValue] = useState(0);
 
+  const handleAdd = () => {
+    onAdd(name, value);
+
+    setName("");
+    setValue(0);
+  };
+
   return (
     <div>
       <div>
@@ -26,7 +33,7 @@ const TransactionForm = ({ onAdd }: TransactionFormProps) => {
       </div>
       <div>
         <button
-          onClick={() => onAdd(name, value)}
+          onClick={handleAdd}
           className="cursor-pointer bg-gray-700 text-white rounded-md"
         >
           Cadastrar
