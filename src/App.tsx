@@ -1,12 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Transaction } from "./types/types";
 import TransactionForm from "./components/TransactionForm";
 import TransactionList from "./components/TransactionList";
 import Summary from "./components/Summary";
 
 function App() {
-  const [incomes, setIncomes] = useState<Transaction[]>([]);
-  const [expenses, setExpenses] = useState<Transaction[]>([]);
+  const [incomes, setIncomes] = useState<Transaction[]>(() => {
+    const saved = localStorage.getItem("incomes");
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [expenses, setExpenses] = useState<Transaction[]>(() => {
+    const saved = localStorage.getItem("expenses");
+    return saved ? JSON.parse(saved) : [];
+  });
 
   const totalIncomes = incomes.reduce((acc, curr) => {
     return acc + curr.value;
@@ -44,6 +50,13 @@ function App() {
 
     setExpenses(updatedList);
   };
+
+  useEffect(() => {
+    localStorage.setItem("incomes", JSON.stringify(incomes));
+  }, [incomes]);
+  useEffect(() => {
+    localStorage.setItem("expenses", JSON.stringify(expenses));
+  }, [expenses]);
 
   return (
     <div>
