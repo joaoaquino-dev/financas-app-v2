@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { Transaction } from "./types/types";
 import TransactionForm from "./components/TransactionForm";
 import TransactionList from "./components/TransactionList";
+import Summary from "./components/Summary";
 
 function App() {
   const [incomes, setIncomes] = useState<Transaction[]>([]);
@@ -33,12 +34,28 @@ function App() {
     setExpenses([...expenses, newTransaction]);
   };
 
+  const removeIncome = (id: string) => {
+    const updatedList = incomes.filter((item) => item.id !== id);
+
+    setIncomes(updatedList);
+  };
+  const removeExpense = (id: string) => {
+    const updatedList = expenses.filter((item) => item.id !== id);
+
+    setExpenses(updatedList);
+  };
+
   return (
     <div>
       <TransactionForm onAdd={handleAddIncome} />
       <TransactionForm onAdd={handleAddExpense} />
-      <TransactionList transactions={incomes} />
-      <TransactionList transactions={expenses} />
+      <TransactionList transactions={incomes} onRemove={removeIncome} />
+      <TransactionList transactions={expenses} onRemove={removeExpense} />
+      <Summary
+        incomes={totalIncomes}
+        expenses={totalExpenses}
+        balance={balance}
+      />
     </div>
   );
 }
